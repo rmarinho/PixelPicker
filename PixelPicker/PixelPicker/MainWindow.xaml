@@ -1,0 +1,21 @@
+﻿<Window x:Class="PixelPicker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PixelPicker"
+         x:Name="root"
+        >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.8*"></ColumnDefinition>
+            <ColumnDefinition Width="0.2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"></RowDefinition>
+            <RowDefinition Height="0.9*"></RowDefinition>
+
+        </Grid.RowDefinitions>
+        <Image x:Name="currentImage" Source="{Binding CurrentImage}" Margin="20" Grid.RowSpan="2"></Image>
+        <Rectangle Fill="{Binding CurrentColor}" Grid.Column="1"></Rectangle>
+        <ListBox Grid.Row="1" ItemsSource="{Binding ImageUrls}" Grid.Column="1" ></ListBox>
+    </Grid>
+</Window>
