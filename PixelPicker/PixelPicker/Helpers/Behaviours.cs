@@ -4,27 +4,61 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interactivity;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace PixelPicker.Helpers
 {
     /// <summary>
-    /// A Behavior that invokes a command when MouseDown event is fired and passes the MouseButtonEventArgs
+    /// A Behavior that invokes a command when MouseDown event is fired and passes the Color of the clicked pixed
     /// </summary>
-    public class MouseDownToCommandBehavior : Behavior<UIElement>
+    public class GetPixelCommandBehavior : Behavior<Image>
     {
+        Color _defaultColor = Colors.Transparent;
+
         protected override void OnAttached()
         {
             AssociatedObject.MouseDown += AssociatedObject_MouseDown;
 
             base.OnAttached();
         }
+   
+        protected override void OnDetaching()
+        {
+            AssociatedObject.MouseDown -= AssociatedObject_MouseDown;
+
+            base.OnDetaching();
+        }
 
         void AssociatedObject_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            //if someone is listening
             if (MouseDownCommand != null)
-                MouseDownCommand.Execute(e);
+            {
+                var color = ProcessMouseEvent(e);
+                MouseDownCommand.Execute(color);
+            }
+        }
+
+        Color ProcessMouseEvent(MouseEventArgs e)
+        {
+            BitmapImage bitmapSource = AssociatedObject.Source as BitmapImage;
+
+            if (bitmapSource != null)
+            {
+                var scaleX = bitmapSource.PixelWidth / AssociatedObject.ActualWidth;
+                var x = (int)(e.GetPosition(AssociatedObject).X * scaleX);
+                var scaleY = bitmapSource.PixelHeight / AssociatedObject.ActualHeight;
+                var y = (int)(e.GetPosition(AssociatedObject).Y * scaleY);
+                if (x < 0 || x > bitmapSource.PixelWidth - 1 || y < 0 || y > bitmapSource.PixelHeight - 1)
+                    return _defaultColor;
+                return bitmapSource.GetPixelColor(x, y);
+
+            }
+            return _defaultColor;
 
         }
 
@@ -36,17 +70,7 @@ namespace PixelPicker.Helpers
 
         // Using a DependencyProperty as the backing store for MouseDownCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MouseDownCommandProperty =
-            DependencyProperty.Register("MouseDownCommand", typeof(ICommand), typeof(MouseDownToCommandBehavior), new PropertyMetadata(null));
-
-
-
-        protected override void OnDetaching()
-        {
-            AssociatedObject.MouseDown += AssociatedObject_MouseDown;
-
-            base.OnDetaching();
-        }
-
+            DependencyProperty.Register("MouseDownCommand", typeof(ICommand), typeof(GetPixelCommandBehavior), new PropertyMetadata(null));
 
     }
 }

@@ -14,6 +14,7 @@ namespace PixelPicker.ViewModel
     internal class MainViewModel : ViewModel
     {
         const string DefaultImageUrl = "default.png";
+
         public MainViewModel()
         {
             CurrentColor = new SolidColorBrush(Colors.Red);
@@ -59,21 +60,22 @@ namespace PixelPicker.ViewModel
             }
         }
 
-        private void ProcessMouse(MouseButtonEventArgs e){
-
+        private void ProcessPixelColor(Color e)
+        {
+            CurrentColor = new SolidColorBrush(e);
         }
 
-        private RelayCommand<MouseButtonEventArgs> _mouseDownCommand = null;
+        private RelayCommand<Color> _getPixelCommand = null;
 
-        public RelayCommand<MouseButtonEventArgs> MouseDownCommand
-       {
-           get
-           {
-               return _mouseDownCommand ?? new RelayCommand<MouseButtonEventArgs>(ProcessMouse);
+        public RelayCommand<Color> GetPixelCommand
+        {
+            get
+            {
+                return _getPixelCommand ?? new RelayCommand<Color>(ProcessPixelColor);
 
-           }
-       }
-	
-        
+            }
+        }
+
+
     }
 }
