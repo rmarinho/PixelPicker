@@ -1,9 +1,11 @@
-﻿using System;
+﻿using PixelPicker.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -57,5 +59,21 @@ namespace PixelPicker.ViewModel
             }
         }
 
+        private void ProcessMouse(MouseButtonEventArgs e){
+
+        }
+
+        private RelayCommand<MouseButtonEventArgs> _mouseDownCommand = null;
+
+        public RelayCommand<MouseButtonEventArgs> MouseDownCommand
+       {
+           get
+           {
+               return _mouseDownCommand ?? new RelayCommand<MouseButtonEventArgs>(ProcessMouse);
+
+           }
+       }
+	
+        
     }
 }
