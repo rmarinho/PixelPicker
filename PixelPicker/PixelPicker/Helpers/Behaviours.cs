@@ -36,10 +36,10 @@ namespace PixelPicker.Helpers
         void AssociatedObject_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //if someone is listening
-            if (MouseDownCommand != null)
+            if (GetPixelCommand != null)
             {
                 var color = ProcessMouseEvent(e);
-                MouseDownCommand.Execute(color);
+                GetPixelCommand.Execute(color);
             }
         }
 
@@ -62,15 +62,15 @@ namespace PixelPicker.Helpers
 
         }
 
-        public ICommand MouseDownCommand
+        public ICommand GetPixelCommand
         {
-            get { return (ICommand)GetValue(MouseDownCommandProperty); }
-            set { SetValue(MouseDownCommandProperty, value); }
+            get { return (ICommand)GetValue(GetPixelCommanddProperty); }
+            set { SetValue(GetPixelCommanddProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for MouseDownCommand.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MouseDownCommandProperty =
-            DependencyProperty.Register("MouseDownCommand", typeof(ICommand), typeof(GetPixelCommandBehavior), new PropertyMetadata(null));
+        // Using a DependencyProperty as the backing store for GetPixelCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty GetPixelCommanddProperty =
+            DependencyProperty.Register("GetPixelCommand", typeof(ICommand), typeof(GetPixelCommandBehavior), new PropertyMetadata(null));
 
     }
 }

@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
         <Image x:Name="currentImage" Source="{Binding CurrentImage}" Margin="20" Grid.RowSpan="2" >
             <i:Interaction.Behaviors>
-                <helpers:GetPixelCommandBehavior  MouseDownCommand="{Binding GetPixelCommand}"></helpers:GetPixelCommandBehavior>
+                <helpers:GetPixelCommandBehavior  GetPixelCommand="{Binding GetPixelCommand}"></helpers:GetPixelCommandBehavior>
             </i:Interaction.Behaviors>
         </Image>
         <Rectangle Fill="{Binding CurrentColor}" Grid.Column="1"></Rectangle>
