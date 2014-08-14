@@ -228,7 +228,7 @@ namespace PixelPicker.Helpers
         private static int Check(int property, string propertyName)
         {
             if (property > 255 || property < 0)
-                throw new ArgumentException(string.Format("The {0} is invalid"), propertyName);
+                throw new ArgumentException(string.Format("The {0} is invalid", propertyName));
             return property;
         }
     }
