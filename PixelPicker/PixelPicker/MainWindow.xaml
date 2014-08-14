@@ -5,7 +5,7 @@
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
         xmlns:helpers="clr-namespace:PixelPicker.Helpers"
         Title="PixelPicker"
-        x:Name="root"
+       DataContext="{StaticResource MainViewModel}"
         >
     <Grid>
 
@@ -18,22 +18,42 @@
             <RowDefinition Height="0.9*"></RowDefinition>
 
         </Grid.RowDefinitions>
-        <Image x:Name="currentImage" Source="{Binding CurrentImage}" Margin="20" Grid.RowSpan="2" >
+        <TextBox Text="{Binding ImageLinks, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <Image x:Name="currentImage" Source="{Binding CurrentImage}" Margin="20" Grid.Row="1" >
             <i:Interaction.Behaviors>
                 <helpers:GetPixelCommandBehavior  GetPixelCommand="{Binding GetPixelCommand}"></helpers:GetPixelCommandBehavior>
             </i:Interaction.Behaviors>
         </Image>
         <Rectangle Fill="{Binding CurrentBrush}" Grid.Column="1"></Rectangle>
-        <StackPanel  Grid.Row="1"  Grid.Column="1">
+        <StackPanel  Grid.Column="1" HorizontalAlignment="Left">
             <TextBlock Text="{Binding CurrentColor.Red, StringFormat=Red: {0}}"></TextBlock>
             <TextBlock Text="{Binding CurrentColor.Green, StringFormat=Green: {0}}"></TextBlock>
             <TextBlock Text="{Binding CurrentColor.Blue, StringFormat=Blue: {0}}"></TextBlock>
-
+        </StackPanel>
+        <StackPanel Grid.Column="1" HorizontalAlignment="Right">
             <TextBlock Text="{Binding CurrentColor.Hue, StringFormat=Hue: {0}}"></TextBlock>
             <TextBlock Text="{Binding CurrentColor.Saturation, StringFormat=Saturation: {0:P2}}"></TextBlock>
             <TextBlock Text="{Binding CurrentColor.Luminosity, StringFormat=Luminosity: {0:P2}}"></TextBlock>
-
-            <ListBox ItemsSource="{Binding ImageUrls}" ></ListBox>
         </StackPanel>
+        <!--<ScrollViewer>-->
+        <!--<StackPanel  >
+                <TextBlock Text="{Binding CurrentColor.Red, StringFormat=Red: {0}}"></TextBlock>
+                <TextBlock Text="{Binding CurrentColor.Green, StringFormat=Green: {0}}"></TextBlock>
+                <TextBlock Text="{Binding CurrentColor.Blue, StringFormat=Blue: {0}}"></TextBlock>
+
+                <TextBlock Text="{Binding CurrentColor.Hue, StringFormat=Hue: {0}}"></TextBlock>
+                <TextBlock Text="{Binding CurrentColor.Saturation, StringFormat=Saturation: {0:P2}}"></TextBlock>
+                <TextBlock Text="{Binding CurrentColor.Luminosity, StringFormat=Luminosity: {0:P2}}"></TextBlock>-->
+
+        <ListBox ItemsSource="{Binding ImageUrls}" SelectedItem="{Binding SelectedImageUrl, Mode=TwoWay}"  Grid.Row="1"  Grid.Column="1" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Image Source="{Binding}" Stretch="Uniform" Width="200"></Image>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <!--</StackPanel>-->
+        <!--</ScrollViewer>-->
+
     </Grid>
 </Window>

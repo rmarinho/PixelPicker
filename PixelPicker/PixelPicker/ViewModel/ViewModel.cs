@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace PixelPicker.ViewModel
 {
+    /// <summary>
+    /// Simple Base View Model
+    /// </summary>
     internal class ViewModel : INotifyPropertyChanged
     {
         #region Implementation of INotifyPropertyChanged

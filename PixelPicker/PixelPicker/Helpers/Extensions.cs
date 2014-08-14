@@ -45,12 +45,12 @@ namespace PixelPicker.Helpers
         }
 
         /// <summary>
-        /// Gets the color of the pixel.
+        /// Gets the color of the pixel using the custom PixelColor .
         /// </summary>
         /// <param name="bitmapSource">The bitmap source.</param>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
-        /// <returns>Color</returns>
+        /// <returns>PixelColor</returns>
         /// <exception cref="PixelPicker.Helpers.OutOfBoundsException"></exception>
         public static PixelColor GetPixelColorUsingPixelColor(this BitmapImage bitmapSource, int x, int y)
         {
@@ -73,9 +73,19 @@ namespace PixelPicker.Helpers
             var b = pixels[0];
             return new PixelColor(a, r, g, b);
         }
+
+        /// <summary>
+        /// Determines whether string  [is valid URL] [the specified URL string].
+        /// </summary>
+        /// <param name="urlString">The URL string to valide.</param>
+        /// <returns></returns>
+        public static bool IsValidUrl(this string urlString)
+        {
+            Uri uri; return Uri.TryCreate(urlString, UriKind.Absolute, out uri)
+                 && (uri.Scheme == Uri.UriSchemeHttp
+                 || uri.Scheme == Uri.UriSchemeHttps
+                 || uri.Scheme == Uri.UriSchemeFtp
+                 || uri.Scheme == Uri.UriSchemeMailto);
+        }
     }
-
-
-
-
 }
