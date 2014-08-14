@@ -62,18 +62,18 @@ namespace PixelPicker.ViewModel
             }
         }
 
-        private void ProcessPixelColor(Color e)
+        private void ProcessPixelColor(PixelColor e)
         {
-            CurrentColor = new SolidColorBrush(e);
+            CurrentColor = new SolidColorBrush(e.ToNormalColor());
         }
 
-        private RelayCommand<Color> _getPixelCommand = null;
+        private RelayCommand<PixelColor> _getPixelCommand = null;
 
-        public RelayCommand<Color> GetPixelCommand
+        public RelayCommand<PixelColor> GetPixelCommand
         {
             get
             {
-                return _getPixelCommand ?? new RelayCommand<Color>(ProcessPixelColor);
+                return _getPixelCommand ?? new RelayCommand<PixelColor>(ProcessPixelColor);
 
             }
         }

@@ -23,6 +23,7 @@ namespace PixelPicker
     {
         public MainWindow()
         {
+            var c = Color.FromArgb(2, 2, 2, 2);
             InitializeComponent();
             this.DataContext = new MainViewModel();
         }

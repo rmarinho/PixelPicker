@@ -17,7 +17,7 @@ namespace PixelPicker.Helpers
     /// </summary>
     public class GetPixelCommandBehavior : Behavior<Image>
     {
-        Color _defaultColor = Colors.Transparent;
+        PixelColor _defaultColor = PixelColor.Transparent;
 
         protected override void OnAttached()
         {
@@ -43,7 +43,7 @@ namespace PixelPicker.Helpers
             }
         }
 
-        Color ProcessMouseEvent(MouseEventArgs e)
+        PixelColor ProcessMouseEvent(MouseEventArgs e)
         {
             BitmapImage bitmapSource = AssociatedObject.Source as BitmapImage;
 
@@ -55,7 +55,7 @@ namespace PixelPicker.Helpers
                 var y = (int)(e.GetPosition(AssociatedObject).Y * scaleY);
                 if (x < 0 || x > bitmapSource.PixelWidth - 1 || y < 0 || y > bitmapSource.PixelHeight - 1)
                     return _defaultColor;
-                return bitmapSource.GetPixelColor(x, y);
+                return bitmapSource.GetPixelColorUsingPixelColor(x, y);
 
             }
             return _defaultColor;

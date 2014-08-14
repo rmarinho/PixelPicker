@@ -14,13 +14,15 @@ namespace PixelPicker.Helpers
     public struct PixelColor
     {
         public static readonly PixelColor Empty;
-
+        public static readonly PixelColor Transparent;
 
         static PixelColor()
         {
             Empty = new PixelColor();
 
+            Transparent = new PixelColor(0, 0, 0, 0);
         }
+
 
         private int r;
         private int a;
@@ -46,6 +48,10 @@ namespace PixelPicker.Helpers
             s = GetSaturation();
         }
 
+        public Color ToNormalColor()
+        {
+            return Color.FromArgb((byte)a, (byte)r, (byte)g, (byte)b);
+        }
         public PixelColor(Color c)
             : this(c.A, c.R, c.G, c.B)
         {
