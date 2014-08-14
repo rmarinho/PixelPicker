@@ -16,7 +16,7 @@ namespace PixelPicker.Helpers
         protected override void OnAttached()
         {
             AssociatedObject.MouseDown += AssociatedObject_MouseDown;
-
+            AssociatedObject.Cursor = Cursors.Cross;
             base.OnAttached();
         }
    

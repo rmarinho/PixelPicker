@@ -16,9 +16,12 @@ namespace PixelPicker.ViewModel
     {
         #region Fields
         const string DefaultImageUrl = "default.png";
-        static string pattern = Regex.Escape(@""); 
+        static string pattern = Regex.Escape(@"");
         #endregion
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainViewModel"/> class.
+        /// </summary>
         public MainViewModel()
         {
             var clr = Colors.Red;
@@ -27,9 +30,18 @@ namespace PixelPicker.ViewModel
             ImageLinks = "http://xamarin.com/";
         }
 
-        #region Methods
+        #region Private Methods
+        /// <summary>
+        /// Loads the page image links.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <returns></returns>
         async Task LoadPageImageLinks(string url)
         {
+            if (string.IsNullOrEmpty(url) || !url.IsValidUrl())
+                return;
+
+
             using (var client = new HttpClient())
             {
                 var result = await client.GetStringAsync(url);
@@ -39,27 +51,36 @@ namespace PixelPicker.ViewModel
                     foreach (Match match in imgResults)
                         if (match.Groups.Count == 2)
                         {
-                            CheckImage(url, match);
+                            CheckIsValidImage(url, match.Groups[1].Value.Trim());
                         }
                 }
             }
         }
 
-        void CheckImage(string url, Match match)
+        /// <summary>
+        /// Checks the image.
+        /// </summary>
+        /// <param name="baseUrl">The base url URL.</param>
+        /// <param name="match">The match.</param>
+        void CheckIsValidImage(string baseUrl, string imgUrl)
         {
-            var imgUrl = match.Groups[1].Value;
             var extension = System.IO.Path.GetExtension(imgUrl).ToLowerInvariant();
             if (extension == ".jpg" || extension == ".png")
             {
-                if (imgUrl.StartsWith("/"))
+                if (!imgUrl.StartsWith("http://") || !imgUrl.StartsWith("https://") || !imgUrl.StartsWith("www"))
                 {
-                    imgUrl = imgUrl.Insert(0, url);
+                    imgUrl = imgUrl.Insert(0, baseUrl);
                 }
                 if (imgUrl.IsValidUrl())
                     ImageUrls.Insert(0, imgUrl);
             }
         }
 
+        /// <summary>
+        /// Parses image links from the textbox.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        [Obsolete]
         void ParseLinks(string text)
         {
             ImageUrls.Clear();
@@ -70,11 +91,25 @@ namespace PixelPicker.ViewModel
                     ImageUrls.Add(item);
 
             }
-        } 
+        }
+
+        /// <summary>
+        /// Updates the color pallete.
+        /// </summary>
+        void UpdateColorPallete()
+        {
+            ColorPallete.Clear();
+            foreach (var item in _currentColor.GetPallete(5, 50))
+            {
+                ColorPallete.Add(new SolidColorBrush(item));
+            }
+
+        }
+
         #endregion
 
         #region Properties
-       
+
         private string _imageLinks;
 
         public string ImageLinks
@@ -120,7 +155,7 @@ namespace PixelPicker.ViewModel
 
         public SolidColorBrush CurrentBrush
         {
-            get { return new SolidColorBrush(_currentColor.ToColor()); }
+            get { return new SolidColorBrush(_currentColor); }
         }
 
 
@@ -132,14 +167,9 @@ namespace PixelPicker.ViewModel
             set
             {
                 _currentColor = value;
-                ColorPallete.Clear();
-                foreach (var item in _currentColor.GetPallete(5, 50))
-                {
-                    ColorPallete.Add(new SolidColorBrush(item.ToColor()));
-                }
-
                 OnPropertyChanged("CurrentColor");
                 OnPropertyChanged("CurrentBrush");
+                UpdateColorPallete();
             }
         }
 
@@ -167,7 +197,7 @@ namespace PixelPicker.ViewModel
                 OnPropertyChanged("ImageUrls");
             }
         }
-        
+
         #endregion
 
         #region Commands
