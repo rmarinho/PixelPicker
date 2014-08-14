@@ -69,7 +69,7 @@ namespace PixelPicker.ViewModel
             {
                 _selectedImageUrl = value;
                 OnPropertyChanged("SelectedImageUrl");
-                if(!string.IsNullOrEmpty(_selectedImageUrl))
+                if (!string.IsNullOrEmpty(_selectedImageUrl))
                     CurrentImage = new BitmapImage(new Uri(_selectedImageUrl, UriKind.RelativeOrAbsolute));
             }
         }
@@ -89,8 +89,26 @@ namespace PixelPicker.ViewModel
             set
             {
                 _currentColor = value;
+                ColorPallete.Clear();
+                foreach (var item in _currentColor.GetPallete(5,50))
+                {
+                     ColorPallete.Add(new SolidColorBrush(item.ToNormalColor()));
+                }
+          
                 OnPropertyChanged("CurrentColor");
                 OnPropertyChanged("CurrentBrush");
+            }
+        }
+
+        private ObservableCollection<SolidColorBrush> _colorPallete = new ObservableCollection<SolidColorBrush>();
+
+        public ObservableCollection<SolidColorBrush> ColorPallete
+        {
+            get { return _colorPallete; }
+            set
+            {
+                _colorPallete = value;
+                OnPropertyChanged("ColorPallete");
             }
         }
 

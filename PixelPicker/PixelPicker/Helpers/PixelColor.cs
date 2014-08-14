@@ -55,11 +55,63 @@ namespace PixelPicker.Helpers
         public PixelColor(int alpha, int red, int green, int blue)
             : this()
         {
-            a = Check(alpha, "Alpha");
-            r = Check(red, "Red");
-            g = Check(green, "Green");
-            b = Check(blue, "Blue");
+
+            this.a = Check(alpha, "Alpha");
+            this.r = Check(red, "Red");
+            this.g = Check(green, "Green");
+            this.b = Check(blue, "Blue");
             UpdateHSL();
+        }
+
+        /// <summary>
+        /// Froms the RGB.
+        /// </summary>
+        /// <param name="red">The red.</param>
+        /// <param name="green">The green.</param>
+        /// <param name="blue">The blue.</param>
+        /// <returns></returns>
+        public static PixelColor FromRGB(int red, int green, int blue)
+        {
+            return new PixelColor(255, red, green, blue);
+        }
+
+        /// <summary>
+        /// Gets the pallete.
+        /// </summary>
+        /// <param name="ncolors">The ncolors.</param>
+        /// <param name="factor">The factor.</param>
+        /// <returns></returns>
+        public PixelColor[] GetPallete(int ncolors, double factor)
+        {
+            var array = new PixelColor[ncolors];
+            for (int i = 0; i < ncolors; i++)
+            {
+                int r = this.r;
+                int g = this.g;
+                int b = this.b;
+                if (r > 150)
+                {
+                    r = (int)(this.r - (i * factor));
+                    if (r < 0)
+                        r = 0;
+                }
+                else if (g > 150)
+                {
+                    g = (int)(this.g - (i * factor));
+                    if (g < 0)
+                        g = 0;
+                }
+                else if (b > 150)
+                {
+                    b = (int)(this.b - (i * factor));
+                    if (b < 0)
+                        b = 0;
+                }
+
+
+                array[i] = new PixelColor(255, r, g, b);
+            }
+            return array;
         }
         private float GetLuminosity()
         {
@@ -175,7 +227,7 @@ namespace PixelPicker.Helpers
         private static int Check(int property, string propertyName)
         {
             if (property > 255 || property < 0)
-                throw new ArgumentException("The {0} is invalid", propertyName);
+                throw new ArgumentException(string.Format("The {0} is invalid"), propertyName);
             return property;
         }
     }
