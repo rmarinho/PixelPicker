@@ -17,6 +17,7 @@ namespace PixelPicker.Helpers
             Empty = new PixelColor();
 
             Transparent = new PixelColor(0, 0, 0, 0);
+       
         }
 
 

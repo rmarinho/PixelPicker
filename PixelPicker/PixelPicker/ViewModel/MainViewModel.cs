@@ -1,6 +1,9 @@
 ﻿using PixelPicker.Helpers;
 using System;
 using System.Collections.ObjectModel;
+using System.Net.Http;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -11,15 +14,50 @@ namespace PixelPicker.ViewModel
     /// </summary>
     internal class MainViewModel : ViewModel
     {
+        #region Fields
         const string DefaultImageUrl = "default.png";
+        static string pattern = Regex.Escape(@""); 
+        #endregion
 
         public MainViewModel()
         {
             var clr = Colors.Red;
             CurrentColor = new PixelColor(Colors.Red.A, Colors.Red.R, Colors.Red.G, Colors.Red.B);
             CurrentImage = new BitmapImage(new Uri(DefaultImageUrl, UriKind.RelativeOrAbsolute));
-            ImageLinks = @"https://raw.githubusercontent.com/XForms/XForms-Toolkit/master/screenshots/ios/buttons.png;
-                           http://xamarin.com/guide/img/xs-icon.png;    http://xamarin.com/guide/img/xs-icon.png";
+            ImageLinks = "http://xamarin.com/";
+        }
+
+        #region Methods
+        async Task LoadPageImageLinks(string url)
+        {
+            using (var client = new HttpClient())
+            {
+                var result = await client.GetStringAsync(url);
+                var imgResults = Regex.Matches(result, "<img.+?src=[\"'](.+?)[\"'].+?>", RegexOptions.IgnoreCase);
+                if (imgResults.Count > 0)
+                {
+                    foreach (Match match in imgResults)
+                        if (match.Groups.Count == 2)
+                        {
+                            CheckImage(url, match);
+                        }
+                }
+            }
+        }
+
+        void CheckImage(string url, Match match)
+        {
+            var imgUrl = match.Groups[1].Value;
+            var extension = System.IO.Path.GetExtension(imgUrl).ToLowerInvariant();
+            if (extension == ".jpg" || extension == ".png")
+            {
+                if (imgUrl.StartsWith("/"))
+                {
+                    imgUrl = imgUrl.Insert(0, url);
+                }
+                if (imgUrl.IsValidUrl())
+                    ImageUrls.Insert(0, imgUrl);
+            }
         }
 
         void ParseLinks(string text)
@@ -32,8 +70,11 @@ namespace PixelPicker.ViewModel
                     ImageUrls.Add(item);
 
             }
-        }
+        } 
+        #endregion
 
+        #region Properties
+       
         private string _imageLinks;
 
         public string ImageLinks
@@ -41,10 +82,12 @@ namespace PixelPicker.ViewModel
             get { return _imageLinks; }
             set
             {
-                _imageLinks = value;
+                _imageLinks = value.Trim();
                 OnPropertyChanged("ImageLinks");
-                if (!string.IsNullOrEmpty(_imageLinks))
-                    ParseLinks(_imageLinks);
+                if (!string.IsNullOrEmpty(_imageLinks) && _imageLinks.IsValidUrl())
+                    //fire and forget
+                    LoadPageImageLinks(_imageLinks);
+
             }
         }
 
@@ -90,11 +133,11 @@ namespace PixelPicker.ViewModel
             {
                 _currentColor = value;
                 ColorPallete.Clear();
-                foreach (var item in _currentColor.GetPallete(5,50))
+                foreach (var item in _currentColor.GetPallete(5, 50))
                 {
-                     ColorPallete.Add(new SolidColorBrush(item.ToNormalColor()));
+                    ColorPallete.Add(new SolidColorBrush(item.ToNormalColor()));
                 }
-          
+
                 OnPropertyChanged("CurrentColor");
                 OnPropertyChanged("CurrentBrush");
             }
@@ -124,8 +167,10 @@ namespace PixelPicker.ViewModel
                 OnPropertyChanged("ImageUrls");
             }
         }
+        
+        #endregion
 
-
+        #region Commands
         private RelayCommand<PixelColor> _getPixelCommand = null;
 
         public RelayCommand<PixelColor> GetPixelCommand
@@ -137,6 +182,7 @@ namespace PixelPicker.ViewModel
             }
         }
 
+        #endregion
 
     }
 }
