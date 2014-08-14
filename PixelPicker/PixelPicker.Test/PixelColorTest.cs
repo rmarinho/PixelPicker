@@ -143,5 +143,29 @@ namespace PixelPicker.Test
             Assert.IsTrue(color.B == newColorHex.Blue, "Blue is not good");
             Assert.IsTrue(color.A == newColorHex.Alpha, "Alpha is not good");
         }
+
+        [TestMethod]
+        public void TestOperatorColorToPixelColor()
+        {
+            var color = Colors.Transparent;
+            PixelColor newColorHex = Colors.Transparent;
+
+            Assert.IsTrue(color.R == newColorHex.Red, "Red is not good");
+            Assert.IsTrue(color.G == newColorHex.Green, "Green is not good");
+            Assert.IsTrue(color.B == newColorHex.Blue, "Blue is not good");
+            Assert.IsTrue(color.A == newColorHex.Alpha, "Alpha is not good");
+        }
+
+        [TestMethod]
+        public void TestOperatorPixelColorToColor()
+        {
+            var color = Colors.Transparent;
+            Color newColorHex = PixelColor.Transparent;
+
+            Assert.IsTrue(color.R == newColorHex.R, "Red is not good");
+            Assert.IsTrue(color.G == newColorHex.G, "Green is not good");
+            Assert.IsTrue(color.B == newColorHex.B, "Blue is not good");
+            Assert.IsTrue(color.A == newColorHex.A, "Alpha is not good");
+        }
     }
 }

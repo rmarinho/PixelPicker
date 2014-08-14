@@ -281,5 +281,17 @@ namespace PixelPicker.Helpers
             s = GetSaturation();
         }
 
+
+        // Conversion from Color to PixelColor
+        public static implicit operator PixelColor(Color c)
+        {
+            return new PixelColor(c.A, c.R, c.G, c.B);
+        }
+
+        // Conversion from PixelColor to Color
+        public static implicit operator Color(PixelColor c)
+        {
+            return c.ToColor();
+        }
     }
 }
