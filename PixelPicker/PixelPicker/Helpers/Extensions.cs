@@ -26,7 +26,7 @@ namespace PixelPicker.Helpers
         public static Color GetPixelColor(this BitmapImage bitmapSource, int x, int y)
         {
             if (bitmapSource == null)
-                throw new Exception("No BitmapImage");
+                throw new ArgumentNullException(PixelPicker.BitmapImageException);
 
             if (x < 0 || x > bitmapSource.PixelWidth - 1 || y < 0 || y > bitmapSource.PixelHeight - 1)
                 throw new OutOfBoundsException();
@@ -57,7 +57,7 @@ namespace PixelPicker.Helpers
         public static PixelColor GetPixelColorUsingPixelColor(this BitmapImage bitmapSource, int x, int y)
         {
             if (bitmapSource == null)
-                throw new Exception("No BitmapImage");
+                throw new Exception(PixelPicker.BitmapImageException);
 
             if (x < 0 || x > bitmapSource.PixelWidth - 1 || y < 0 || y > bitmapSource.PixelHeight - 1)
                 throw new OutOfBoundsException();

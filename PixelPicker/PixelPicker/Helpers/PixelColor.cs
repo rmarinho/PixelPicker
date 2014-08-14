@@ -75,10 +75,10 @@ namespace PixelPicker.Helpers
             : this()
         {
 
-            this.a = Check(alpha, "Alpha");
-            this.r = Check(red, "Red");
-            this.g = Check(green, "Green");
-            this.b = Check(blue, "Blue");
+            this.a = Check(alpha, PixelPicker.Alpha);
+            this.r = Check(red, PixelPicker.Red);
+            this.g = Check(green, PixelPicker.Green);
+            this.b = Check(blue, PixelPicker.Blue);
             UpdateHSL();
         }
 
@@ -167,45 +167,45 @@ namespace PixelPicker.Helpers
             return array;
         }
 
-        private static void ConvertHSLtoRGB(int a, float h, float s, float b, out int alpha, out int red, out int green, out int blue)
+        private static void ConvertHSLtoRGB(int a, float h, float s, float l, out int alpha, out int red, out int green, out int blue)
         {
 
             if (0 > a || 255 < a)
             {
-                throw new ArgumentOutOfRangeException("a", a, "InvalidAlpha");
+                throw new ArgumentOutOfRangeException("a", a, string.Format(PixelPicker.ArgumentOutOfBoundsException, PixelPicker.Alpha));
             }
             if (0f > h || 360f < h)
             {
-                throw new ArgumentOutOfRangeException("h", h, "InvalidHue");
+                throw new ArgumentOutOfRangeException("h", h, string.Format(PixelPicker.ArgumentOutOfBoundsException, PixelPicker.Hue));
             }
             if (0f > s || 1f < s)
             {
-                throw new ArgumentOutOfRangeException("s", s, "InvalidSaturation");
+                throw new ArgumentOutOfRangeException("s", s, string.Format(PixelPicker.ArgumentOutOfBoundsException, PixelPicker.Saturation));
             }
-            if (0f > b || 1f < b)
+            if (0f > l || 1f < l)
             {
-                throw new ArgumentOutOfRangeException("b", b, "InvalidBrightness");
+                throw new ArgumentOutOfRangeException("b", l, string.Format(PixelPicker.ArgumentOutOfBoundsException, PixelPicker.Luminosity));
             }
 
             alpha = a;
 
             if (0 == s)
             {
-                red = blue = green = Convert.ToInt32(b * 255);
+                red = blue = green = Convert.ToInt32(l * 255);
             }
 
             double fMax, fMid, fMin;
             int iSextant, iMax, iMid, iMin;
 
-            if (0.5 < b)
+            if (0.5 < l)
             {
-                fMax = b - (b * s) + s;
-                fMin = b + (b * s) - s;
+                fMax = l - (l * s) + s;
+                fMin = l + (l * s) - s;
             }
             else
             {
-                fMax = b + (b * s);
-                fMin = b - (b * s);
+                fMax = l + (l * s);
+                fMin = l - (l * s);
             }
 
             iSextant = (int)Math.Floor(h / 60f);
@@ -266,7 +266,7 @@ namespace PixelPicker.Helpers
         private static void ConvertHEXToRGB(string hexColor, out int alpha, out int red, out int green, out int blue)
         {
             if (hexColor.IndexOf('#') != 0)
-                throw new ArgumentException("HEX color not in the correct format","hexColor");
+                throw new ArgumentException(PixelPicker.ArgumentExceptionHex, PixelPicker.HexColor);
 
             red = 0;
             green = 0;
@@ -289,7 +289,7 @@ namespace PixelPicker.Helpers
                 blue = int.Parse(hexColor.Substring(6, 2), NumberStyles.AllowHexSpecifier);
             }
             else
-                throw new ArgumentException("HEX color not in the correct format");
+                throw new ArgumentException(PixelPicker.ArgumentExceptionHex, PixelPicker.HexColor);
         }
 
         private float GetLuminosity()
@@ -406,7 +406,7 @@ namespace PixelPicker.Helpers
         private static int Check(int property, string propertyName)
         {
             if (property > 255 || property < 0)
-                throw new ArgumentOutOfRangeException(string.Format("The {0} is invalid", propertyName));
+                throw new ArgumentOutOfRangeException(string.Format(PixelPicker.ArgumentOutOfBoundsException , propertyName));
             return property;
         }
 
