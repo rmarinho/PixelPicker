@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Windows.Media.Imaging;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PixelPicker.Helpers;
+using System;
 using System.Windows;
+using System.Windows.Media.Imaging;
 namespace PixelPicker.Test
 {
     [TestClass]

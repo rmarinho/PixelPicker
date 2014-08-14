@@ -22,6 +22,7 @@ namespace PixelPicker.Helpers
         /// <param name="y">The y.</param>
         /// <returns>Color</returns>
         /// <exception cref="PixelPicker.Helpers.OutOfBoundsException"></exception>
+  
         public static Color GetPixelColor(this BitmapImage bitmapSource, int x, int y)
         {
             if (bitmapSource == null)
@@ -52,6 +53,7 @@ namespace PixelPicker.Helpers
         /// <param name="y">The y.</param>
         /// <returns>PixelColor</returns>
         /// <exception cref="PixelPicker.Helpers.OutOfBoundsException"></exception>
+       
         public static PixelColor GetPixelColorUsingPixelColor(this BitmapImage bitmapSource, int x, int y)
         {
             if (bitmapSource == null)
@@ -75,9 +77,9 @@ namespace PixelPicker.Helpers
         }
 
         /// <summary>
-        /// Determines whether string  [is valid URL] [the specified URL string].
+        /// Determines whether string is a valid url.
         /// </summary>
-        /// <param name="urlString">The URL string to valide.</param>
+        /// <param name="urlString">The URL string to validate.</param>
         /// <returns></returns>
         public static bool IsValidUrl(this string urlString)
         {

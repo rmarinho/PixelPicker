@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Windows.Media.Imaging;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PixelPicker.Helpers;
-using System.Windows;
+using System;
 using System.Windows.Media;
 namespace PixelPicker.Test
 {
@@ -43,6 +41,25 @@ namespace PixelPicker.Test
             var newColor = new PixelColor(255, 257, Colors.Red.G, Colors.Red.B);
 
          
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestWrongGreenArgument()
+        {
+            var color = System.Drawing.Color.Red;
+            var newColor = new PixelColor(255, Colors.Red.R, 257, Colors.Red.B);
+
+
+        }
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestWrongGreenArgument()
+        {
+            var color = System.Drawing.Color.Red;
+            var newColor = new PixelColor(255, Colors.Red.R, Colors.Red.G, 257);
+
+
         }
     }
 }

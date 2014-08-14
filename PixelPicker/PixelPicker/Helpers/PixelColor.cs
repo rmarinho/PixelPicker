@@ -64,7 +64,7 @@ namespace PixelPicker.Helpers
         }
 
         /// <summary>
-        /// Froms the RGB.
+        /// Get PixelColor from  RGB.
         /// </summary>
         /// <param name="red">The red.</param>
         /// <param name="green">The green.</param>
