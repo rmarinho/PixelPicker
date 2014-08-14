@@ -6,7 +6,7 @@ using System.Windows;
 namespace PixelPicker.Test
 {
     [TestClass]
-    public class UnitTest1
+    public class GetPixelExtensionTest
     {
         [AssemblyInitialize]
         public static void InitializeTestAssembly(TestContext ctx)

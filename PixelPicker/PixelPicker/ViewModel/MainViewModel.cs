@@ -17,7 +17,9 @@ namespace PixelPicker.ViewModel
 
         public MainViewModel()
         {
+            var clr = Colors.Red;
             CurrentColor = new SolidColorBrush(Colors.Red);
+            var newColor = new PixelColor(Colors.Red.A, Colors.Red.R, Colors.Red.G, Colors.Red.B);
             //   Image = new BitmapImage(new Uri("http://xamarin.com/guide/img/xs-icon.png", UriKind.RelativeOrAbsolute));
             CurrentImage = new BitmapImage(new Uri(DefaultImageUrl, UriKind.RelativeOrAbsolute));
         }
