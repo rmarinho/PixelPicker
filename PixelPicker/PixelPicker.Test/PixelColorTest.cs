@@ -54,7 +54,7 @@ namespace PixelPicker.Test
         }
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void TestWrongGreenArgument()
+        public void TestWrongBlueArgument()
         {
             var color = System.Drawing.Color.Red;
             var newColor = new PixelColor(255, Colors.Red.R, Colors.Red.G, 257);
