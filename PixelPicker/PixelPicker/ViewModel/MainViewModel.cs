@@ -120,7 +120,7 @@ namespace PixelPicker.ViewModel
 
         public SolidColorBrush CurrentBrush
         {
-            get { return new SolidColorBrush(_currentColor.ToNormalColor()); }
+            get { return new SolidColorBrush(_currentColor.ToColor()); }
         }
 
 
@@ -135,7 +135,7 @@ namespace PixelPicker.ViewModel
                 ColorPallete.Clear();
                 foreach (var item in _currentColor.GetPallete(5, 50))
                 {
-                    ColorPallete.Add(new SolidColorBrush(item.ToNormalColor()));
+                    ColorPallete.Add(new SolidColorBrush(item.ToColor()));
                 }
 
                 OnPropertyChanged("CurrentColor");

@@ -34,13 +34,23 @@ namespace PixelPicker.Test
         }
 
         [TestMethod]
+        public void TestKnownTransparent()
+        {
+            var color = Colors.Transparent;
+            var transparentColor = PixelColor.Transparent;
+
+            Assert.IsTrue(color.R == transparentColor.Red, "Red is not good");
+            Assert.IsTrue(color.G == transparentColor.Green, "Green is not good");
+            Assert.IsTrue(color.B == transparentColor.Blue, "Blue is not good");
+            Assert.IsTrue(color.A == transparentColor.Alpha, "Alpha is not good");
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void TestWrongRedArgument()
         {
             var color = System.Drawing.Color.Red;
             var newColor = new PixelColor(255, 257, Colors.Red.G, Colors.Red.B);
-
-         
         }
 
         [TestMethod]
@@ -49,17 +59,89 @@ namespace PixelPicker.Test
         {
             var color = System.Drawing.Color.Red;
             var newColor = new PixelColor(255, Colors.Red.R, 257, Colors.Red.B);
-
-
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void TestWrongBlueArgument()
         {
             var color = System.Drawing.Color.Red;
             var newColor = new PixelColor(255, Colors.Red.R, Colors.Red.G, 257);
+        }
 
+        [TestMethod]
+        public void TestHexRedColor()
+        {
+            var color = Colors.Red;
+            var newColorHex = PixelColor.FromHex("#FF0000");
 
+            Assert.IsTrue(color.R == newColorHex.Red, "Red is not good");
+            Assert.IsTrue(color.G == newColorHex.Green, "Green is not good");
+            Assert.IsTrue(color.B == newColorHex.Blue, "Blue is not good");
+            Assert.IsTrue(color.A == newColorHex.Alpha, "Alpha is not good");
+        }
+
+        [TestMethod]
+        public void TestHexWhiteColor()
+        {
+            var color = Colors.White;
+            var newColorHex = PixelColor.FromHex("#FFFFFF");
+
+            Assert.IsTrue(color.R == newColorHex.Red, "Red is not good");
+            Assert.IsTrue(color.G == newColorHex.Green, "Green is not good");
+            Assert.IsTrue(color.B == newColorHex.Blue, "Blue is not good");
+            Assert.IsTrue(color.A == newColorHex.Alpha, "Alpha is not good");
+        }
+
+        [TestMethod]
+        public void TestHexWhiteWithTransparencyColor()
+        {
+            var color = Colors.White;
+            color.A = 10;
+            var newColorHex = PixelColor.FromHex("#0AFFFFFF");
+
+            Assert.IsTrue(color.R == newColorHex.Red, "Red is not good");
+            Assert.IsTrue(color.G == newColorHex.Green, "Green is not good");
+            Assert.IsTrue(color.B == newColorHex.Blue, "Blue is not good");
+            Assert.IsTrue(color.A == newColorHex.Alpha, "Alpha is not good");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestHexException()
+        {
+            var color = Colors.White;
+            var newColorHex = PixelColor.FromHex("0AFFFFFF");
+
+            Assert.IsTrue(color.R == newColorHex.Red, "Red is not good");
+            Assert.IsTrue(color.G == newColorHex.Green, "Green is not good");
+            Assert.IsTrue(color.B == newColorHex.Blue, "Blue is not good");
+            Assert.IsTrue(color.A == newColorHex.Alpha, "Alpha is not good");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestHexException2()
+        {
+            var color = Colors.White;
+            var newColorHex = PixelColor.FromHex("s");
+
+            Assert.IsTrue(color.R == newColorHex.Red, "Red is not good");
+            Assert.IsTrue(color.G == newColorHex.Green, "Green is not good");
+            Assert.IsTrue(color.B == newColorHex.Blue, "Blue is not good");
+            Assert.IsTrue(color.A == newColorHex.Alpha, "Alpha is not good");
+        }
+
+        [TestMethod]
+        public void TestHexFullTransparent()
+        {
+            var color = Colors.Transparent;
+            var newColorHex = PixelColor.FromHex("#00FFFFFF");
+
+            Assert.IsTrue(color.R == newColorHex.Red, "Red is not good");
+            Assert.IsTrue(color.G == newColorHex.Green, "Green is not good");
+            Assert.IsTrue(color.B == newColorHex.Blue, "Blue is not good");
+            Assert.IsTrue(color.A == newColorHex.Alpha, "Alpha is not good");
         }
     }
 }

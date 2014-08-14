@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows.Media;
 
 namespace PixelPicker.Helpers
 {
-
     /// <summary>
-    /// Our custom Pixel Color , supports HSL values
+    /// Our custom Pixel Color , supports RGB, HSL and HEX values
     /// </summary>
     public struct PixelColor
     {
@@ -15,11 +15,8 @@ namespace PixelPicker.Helpers
         static PixelColor()
         {
             Empty = new PixelColor();
-
-            Transparent = new PixelColor(0, 0, 0, 0);
-       
+            Transparent = new PixelColor(0, 255, 255, 255);
         }
-
 
         private int r;
         private int a;
@@ -38,14 +35,13 @@ namespace PixelPicker.Helpers
         public double Saturation { get { return s; } }
         public double Luminosity { get { return l; } }
 
-        private void UpdateHSL()
-        {
-            h = GetHue();
-            l = GetLuminosity();
-            s = GetSaturation();
-        }
+     
 
-        public Color ToNormalColor()
+        /// <summary>
+        /// Pixel Color as a System Color 
+        /// </summary>
+        /// <returns></returns>
+        public Color ToColor()
         {
             return Color.FromArgb((byte)a, (byte)r, (byte)g, (byte)b);
         }
@@ -53,6 +49,7 @@ namespace PixelPicker.Helpers
             : this(c.A, c.R, c.G, c.B)
         {
         }
+
         public PixelColor(int alpha, int red, int green, int blue)
             : this()
         {
@@ -74,6 +71,21 @@ namespace PixelPicker.Helpers
         public static PixelColor FromRGB(int red, int green, int blue)
         {
             return new PixelColor(255, red, green, blue);
+        }
+
+        /// <summary>
+        /// Get a Pixel the hexadecima.
+        /// </summary>
+        /// <param name="hex">The hexadecimal.</param>
+        /// <returns></returns>
+        public static PixelColor FromHex(string hex)
+        {
+            int red;
+            int green;
+            int blue;
+            int alpha;
+            ConvertFromHexToRGB(hex, out alpha, out red, out green, out blue);
+            return new PixelColor(alpha, red, green, blue);
         }
 
         /// <summary>
@@ -114,6 +126,36 @@ namespace PixelPicker.Helpers
             }
             return array;
         }
+       
+        private static void ConvertFromHexToRGB(string hexColor, out int alpha, out int red, out int green, out int blue)
+        {
+            if (hexColor.IndexOf('#') != 0)
+                throw new ArgumentException("HEX color not in the correct format");
+            
+            red = 0;
+            green = 0;
+            blue = 0;
+            alpha = 255;
+
+            hexColor = hexColor.Replace("#", "");
+
+            if (hexColor.Length == 6)
+            {
+                red = int.Parse(hexColor.Substring(0, 2), NumberStyles.AllowHexSpecifier);
+                green = int.Parse(hexColor.Substring(2, 2), NumberStyles.AllowHexSpecifier);
+                blue = int.Parse(hexColor.Substring(4, 2), NumberStyles.AllowHexSpecifier);
+            }
+            else if (hexColor.Length == 8)
+            {
+                alpha = int.Parse(hexColor.Substring(0, 2), NumberStyles.AllowHexSpecifier);
+                red = int.Parse(hexColor.Substring(2, 2), NumberStyles.AllowHexSpecifier);
+                green = int.Parse(hexColor.Substring(4, 2), NumberStyles.AllowHexSpecifier);
+                blue = int.Parse(hexColor.Substring(6, 2), NumberStyles.AllowHexSpecifier);
+            }
+            else
+                throw new ArgumentException("HEX color not in the correct format");
+        }
+
         private float GetLuminosity()
         {
             float num = ((float)this.Red) / 255f;
@@ -231,5 +273,13 @@ namespace PixelPicker.Helpers
                 throw new ArgumentException(string.Format("The {0} is invalid", propertyName));
             return property;
         }
+
+        private void UpdateHSL()
+        {
+            h = GetHue();
+            l = GetLuminosity();
+            s = GetSaturation();
+        }
+
     }
 }
