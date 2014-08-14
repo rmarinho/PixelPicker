@@ -18,8 +18,7 @@ namespace PixelPicker.ViewModel
         public MainViewModel()
         {
             var clr = Colors.Red;
-            CurrentColor = new SolidColorBrush(Colors.Red);
-            var newColor = new PixelColor(Colors.Red.A, Colors.Red.R, Colors.Red.G, Colors.Red.B);
+            CurrentColor = new PixelColor(Colors.Red.A, Colors.Red.R, Colors.Red.G, Colors.Red.B);
             //   Image = new BitmapImage(new Uri("http://xamarin.com/guide/img/xs-icon.png", UriKind.RelativeOrAbsolute));
             CurrentImage = new BitmapImage(new Uri(DefaultImageUrl, UriKind.RelativeOrAbsolute));
         }
@@ -37,15 +36,23 @@ namespace PixelPicker.ViewModel
             }
         }
 
-        private SolidColorBrush _currentColor;
+   
+        public SolidColorBrush CurrentBrush
+        {
+            get { return new SolidColorBrush(_currentColor.ToNormalColor()); }
+        }
 
-        public SolidColorBrush CurrentColor
+
+        private PixelColor _currentColor;
+
+        public PixelColor CurrentColor
         {
             get { return _currentColor; }
             set
             {
                 _currentColor = value;
                 OnPropertyChanged("CurrentColor");
+                OnPropertyChanged("CurrentBrush");
             }
         }
 
@@ -62,10 +69,6 @@ namespace PixelPicker.ViewModel
             }
         }
 
-        private void ProcessPixelColor(PixelColor e)
-        {
-            CurrentColor = new SolidColorBrush(e.ToNormalColor());
-        }
 
         private RelayCommand<PixelColor> _getPixelCommand = null;
 
@@ -73,7 +76,7 @@ namespace PixelPicker.ViewModel
         {
             get
             {
-                return _getPixelCommand ?? new RelayCommand<PixelColor>(ProcessPixelColor);
+                return _getPixelCommand ?? new RelayCommand<PixelColor>(clr => CurrentColor = clr);
 
             }
         }

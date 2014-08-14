@@ -8,7 +8,7 @@
         x:Name="root"
         >
     <Grid>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.8*"></ColumnDefinition>
             <ColumnDefinition Width="0.2*"></ColumnDefinition>
@@ -23,7 +23,17 @@
                 <helpers:GetPixelCommandBehavior  GetPixelCommand="{Binding GetPixelCommand}"></helpers:GetPixelCommandBehavior>
             </i:Interaction.Behaviors>
         </Image>
-        <Rectangle Fill="{Binding CurrentColor}" Grid.Column="1"></Rectangle>
-        <ListBox Grid.Row="1" ItemsSource="{Binding ImageUrls}" Grid.Column="1" ></ListBox>
+        <Rectangle Fill="{Binding CurrentBrush}" Grid.Column="1"></Rectangle>
+        <StackPanel  Grid.Row="1"  Grid.Column="1">
+            <TextBlock Text="{Binding CurrentColor.Red, StringFormat=Red: {0}}"></TextBlock>
+            <TextBlock Text="{Binding CurrentColor.Green, StringFormat=Green: {0}}"></TextBlock>
+            <TextBlock Text="{Binding CurrentColor.Blue, StringFormat=Blue: {0}}"></TextBlock>
+
+            <TextBlock Text="{Binding CurrentColor.Hue, StringFormat=Hue: {0}}"></TextBlock>
+            <TextBlock Text="{Binding CurrentColor.Saturation, StringFormat=Saturation: {0:P2}}"></TextBlock>
+            <TextBlock Text="{Binding CurrentColor.Luminosity, StringFormat=Luminosity: {0:P2}}"></TextBlock>
+
+            <ListBox ItemsSource="{Binding ImageUrls}" ></ListBox>
+        </StackPanel>
     </Grid>
 </Window>

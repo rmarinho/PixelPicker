@@ -28,10 +28,16 @@ namespace PixelPicker.Test
 
             BitmapImage bmp = new BitmapImage(new Uri("default.png", UriKind.RelativeOrAbsolute));
             var color = bmp.GetPixelColor(x, y);
+            var pixColor = bmp.GetPixelColorUsingPixelColor(x, y);
             Assert.IsTrue(color.R == r, "Red is not good");
             Assert.IsTrue(color.G == g, "Green is not good");
             Assert.IsTrue(color.B == b, "Blue is not good");
             Assert.IsTrue(color.A == a, "Alpha is not good");
+
+            Assert.IsTrue(pixColor.Red == r, "Red PixelColor is not good");
+            Assert.IsTrue(pixColor.Green == g, "Green PixelColor is not good");
+            Assert.IsTrue(pixColor.Blue == b, "Blue PixelColor is not good");
+            Assert.IsTrue(pixColor.Alpha == a, "Alpha PixelColor is not good");
         }
 
         [DeploymentItem(DefaultImageUrl)]
@@ -47,10 +53,16 @@ namespace PixelPicker.Test
 
             BitmapImage bmp = new BitmapImage(new Uri("default.png", UriKind.RelativeOrAbsolute));
             var color = bmp.GetPixelColor(x, y);
+            var pixColor = bmp.GetPixelColorUsingPixelColor(x, y);
+           
             Assert.IsTrue(color.R == r, "Red is not good");
             Assert.IsTrue(color.G == g, "Green is not good");
             Assert.IsTrue(color.B == b, "Blue is not good");
             Assert.IsTrue(color.A == a, "Alpha is not good");
+            Assert.IsTrue(pixColor.Red == r, "Red PixelColor is not good");
+            Assert.IsTrue(pixColor.Green == g, "Green PixelColor is not good");
+            Assert.IsTrue(pixColor.Blue == b, "Blue PixelColor is not good");
+            Assert.IsTrue(pixColor.Alpha == a, "Alpha PixelColor is not good");
         }
 
         [DeploymentItem(DefaultImageUrl)]
@@ -61,7 +73,7 @@ namespace PixelPicker.Test
             int x = -1;
             int y = 0;
             BitmapImage bmp = new BitmapImage(new Uri("default.png", UriKind.RelativeOrAbsolute));
-            var color = bmp.GetPixelColor(x, y);
+            var color = bmp.GetPixelColorUsingPixelColor(x, y);
         }
 
         [DeploymentItem(DefaultImageUrl)]
@@ -72,7 +84,7 @@ namespace PixelPicker.Test
             int x = 0;
             int y = -1;
             BitmapImage bmp = new BitmapImage(new Uri("default.png", UriKind.RelativeOrAbsolute));
-            var color = bmp.GetPixelColor(x, y);
+            var color = bmp.GetPixelColorUsingPixelColor(x, y);
         }
     }
 }
