@@ -7,7 +7,7 @@ namespace PixelPicker.Test
     [TestClass]
     public class PixelColorTest
     {
-       
+
         [TestMethod]
         public void TestRedColor()
         {
@@ -30,7 +30,7 @@ namespace PixelPicker.Test
             Assert.IsTrue(color.GetHue() == newColor.Hue, "Hue is not good");
             Assert.IsTrue(color.GetSaturation() == newColor.Saturation, "Saturation is not good");
             Assert.IsTrue(color.GetBrightness() == newColor.Luminosity, "Luminosity is not good");
-          
+
         }
 
         [TestMethod]
@@ -46,7 +46,7 @@ namespace PixelPicker.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void TestWrongRedArgument()
         {
             var color = System.Drawing.Color.Red;
@@ -54,7 +54,7 @@ namespace PixelPicker.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void TestWrongGreenArgument()
         {
             var color = System.Drawing.Color.Red;
@@ -62,7 +62,7 @@ namespace PixelPicker.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void TestWrongBlueArgument()
         {
             var color = System.Drawing.Color.Red;
@@ -166,6 +166,57 @@ namespace PixelPicker.Test
             Assert.IsTrue(color.G == newColorHex.G, "Green is not good");
             Assert.IsTrue(color.B == newColorHex.B, "Blue is not good");
             Assert.IsTrue(color.A == newColorHex.A, "Alpha is not good");
+        }
+
+
+        [TestMethod]
+        public void TestHSLRedColor()
+        {
+            var color = Colors.Red;
+            var newColorHex = PixelColor.FromHSL(255, 0, 1, 0.5);
+
+            Assert.IsTrue(color.R == newColorHex.Red, "Red is not good");
+            Assert.IsTrue(color.G == newColorHex.Green, "Green is not good");
+            Assert.IsTrue(color.B == newColorHex.Blue, "Blue is not good");
+            Assert.IsTrue(color.A == newColorHex.Alpha, "Alpha is not good");
+        }
+
+
+        [TestMethod]
+        public void TestHSLGreenColor()
+        {
+            var color = Color.FromRgb(0,255,0);
+            var newColorHex = PixelColor.FromHSL(255, 120, 1, 0.5);
+
+            Assert.IsTrue(color.R == newColorHex.Red, "Red is not good");
+            Assert.IsTrue(color.G == newColorHex.Green, "Green is not good");
+            Assert.IsTrue(color.B == newColorHex.Blue, "Blue is not good");
+            Assert.IsTrue(color.A == newColorHex.Alpha, "Alpha is not good");
+        }
+
+
+        [TestMethod]
+        public void TestGreenColorAllFormats()
+        {
+            var color = Color.FromRgb(0, 255, 0);
+            var newcolor = new PixelColor(0, 255, 0);
+            var newColorHex = PixelColor.FromHex("#00FF00");
+            var newColorHSL = PixelColor.FromHSL(255, 120, 1, 0.5);
+
+            Assert.IsTrue(color.R == newcolor.Red, "Red is not good");
+            Assert.IsTrue(color.G == newcolor.Green, "Green is not good");
+            Assert.IsTrue(color.B == newcolor.Blue, "Blue is not good");
+            Assert.IsTrue(color.A == newcolor.Alpha, "Alpha is not good");
+
+            Assert.IsTrue(color.R == newColorHex.Red, "Red is not good in HEX");
+            Assert.IsTrue(color.G == newColorHex.Green, "Green is not good in HEX");
+            Assert.IsTrue(color.B == newColorHex.Blue, "Blue is not good in HEX");
+            Assert.IsTrue(color.A == newColorHex.Alpha, "Alpha is not good in HEX");
+
+            Assert.IsTrue(color.R == newColorHSL.Red, "Red is not good in HSL");
+            Assert.IsTrue(color.G == newColorHSL.Green, "Green is not good in HSL");
+            Assert.IsTrue(color.B == newColorHSL.Blue, "Blue is not good in HSL");
+            Assert.IsTrue(color.A == newColorHSL.Alpha, "Alpha is not good in HSL");
         }
     }
 }

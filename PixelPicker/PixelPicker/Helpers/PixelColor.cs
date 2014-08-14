@@ -35,7 +35,7 @@ namespace PixelPicker.Helpers
         public double Saturation { get { return s; } }
         public double Luminosity { get { return l; } }
 
-     
+
 
         /// <summary>
         /// Pixel Color as a System Color 
@@ -45,11 +45,32 @@ namespace PixelPicker.Helpers
         {
             return Color.FromArgb((byte)a, (byte)r, (byte)g, (byte)b);
         }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PixelColor"/> struct from a System.Windows.Color
+        /// </summary>
+        /// <param name="c">The c.</param>
         public PixelColor(Color c)
             : this(c.A, c.R, c.G, c.B)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PixelColor"/> struct.
+        /// </summary>
+        /// <param name="red">The red.</param>
+        /// <param name="green">The green.</param>
+        /// <param name="blue">The blue.</param>
+        public PixelColor(int red, int green, int blue)
+            : this(255,red,green,blue)
+        {
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PixelColor"/> struct.
+        /// </summary>
+        /// <param name="alpha">The alpha.</param>
+        /// <param name="red">The red.</param>
+        /// <param name="green">The green.</param>
+        /// <param name="blue">The blue.</param>
         public PixelColor(int alpha, int red, int green, int blue)
             : this()
         {
@@ -73,10 +94,29 @@ namespace PixelPicker.Helpers
             return new PixelColor(255, red, green, blue);
         }
 
+      
         /// <summary>
-        /// Get a Pixel the hexadecima.
+        /// Froms the HSL.
         /// </summary>
-        /// <param name="hex">The hexadecimal.</param>
+        /// <param name="alpha">The alpha value is between 0 -255</param>
+        /// <param name="hue">The hue in degrees a value between 0 - 360</param>
+        /// <param name="saturation">The saturation in percentage between 0 - 1</param>
+        /// <param name="luminosity">The luminosity in percentage between 0 - 1</param>
+        /// <returns></returns>
+        public static PixelColor FromHSL(int alpha, double hue, double saturation, double luminosity)
+        {
+            int red;
+            int green;
+            int blue;
+            int alpha1;
+            ConvertHSLtoRGB(alpha, (float)hue, (float)saturation, (float)luminosity, out alpha1, out red, out green, out blue);
+            return new PixelColor(alpha1, red, green, blue);
+        }
+     
+        /// <summary>
+        /// Get a PixelColor from the hexadecimal representation.
+        /// </summary>
+        /// <param name="hex">Color representation in hexadecimal notation.</param>
         /// <returns></returns>
         public static PixelColor FromHex(string hex)
         {
@@ -84,7 +124,7 @@ namespace PixelPicker.Helpers
             int green;
             int blue;
             int alpha;
-            ConvertFromHexToRGB(hex, out alpha, out red, out green, out blue);
+            ConvertHEXToRGB(hex, out alpha, out red, out green, out blue);
             return new PixelColor(alpha, red, green, blue);
         }
 
@@ -126,12 +166,108 @@ namespace PixelPicker.Helpers
             }
             return array;
         }
-       
-        private static void ConvertFromHexToRGB(string hexColor, out int alpha, out int red, out int green, out int blue)
+
+        private static void ConvertHSLtoRGB(int a, float h, float s, float b, out int alpha, out int red, out int green, out int blue)
+        {
+
+            if (0 > a || 255 < a)
+            {
+                throw new ArgumentOutOfRangeException("a", a, "InvalidAlpha");
+            }
+            if (0f > h || 360f < h)
+            {
+                throw new ArgumentOutOfRangeException("h", h, "InvalidHue");
+            }
+            if (0f > s || 1f < s)
+            {
+                throw new ArgumentOutOfRangeException("s", s, "InvalidSaturation");
+            }
+            if (0f > b || 1f < b)
+            {
+                throw new ArgumentOutOfRangeException("b", b, "InvalidBrightness");
+            }
+
+            alpha = a;
+
+            if (0 == s)
+            {
+                red = blue = green = Convert.ToInt32(b * 255);
+            }
+
+            double fMax, fMid, fMin;
+            int iSextant, iMax, iMid, iMin;
+
+            if (0.5 < b)
+            {
+                fMax = b - (b * s) + s;
+                fMin = b + (b * s) - s;
+            }
+            else
+            {
+                fMax = b + (b * s);
+                fMin = b - (b * s);
+            }
+
+            iSextant = (int)Math.Floor(h / 60f);
+            if (300f <= h)
+            {
+                h -= 360f;
+            }
+            h /= 60f;
+            h -= 2f * (float)Math.Floor(((iSextant + 1f) % 6f) / 2f);
+            if (0 == iSextant % 2)
+            {
+                fMid = h * (fMax - fMin) + fMin;
+            }
+            else
+            {
+                fMid = fMin - h * (fMax - fMin);
+            }
+
+            iMax = Convert.ToInt32(fMax * 255);
+            iMid = Convert.ToInt32(fMid * 255);
+            iMin = Convert.ToInt32(fMin * 255);
+
+            switch (iSextant)
+            {
+                case 1:
+                    red = iMid;
+                    green = iMax;
+                    blue = iMid;
+                    break;
+                case 2:
+                    red = iMin;
+                    green = iMax;
+                    blue = iMid;
+                    break;
+                case 3:
+                    red = iMin;
+                    green = iMid;
+                    blue = iMax;
+                    break;
+                case 4:
+                    red = iMid;
+                    green = iMin;
+                    blue = iMax;
+                    break;
+                case 5:
+                    red = iMax;
+                    green = iMin;
+                    blue = iMid;
+                    break;
+                default:
+                    red = iMax;
+                    green = iMid;
+                    blue = iMin;
+                    break;
+            }
+        }
+
+        private static void ConvertHEXToRGB(string hexColor, out int alpha, out int red, out int green, out int blue)
         {
             if (hexColor.IndexOf('#') != 0)
-                throw new ArgumentException("HEX color not in the correct format");
-            
+                throw new ArgumentException("HEX color not in the correct format","hexColor");
+
             red = 0;
             green = 0;
             blue = 0;
@@ -270,7 +406,7 @@ namespace PixelPicker.Helpers
         private static int Check(int property, string propertyName)
         {
             if (property > 255 || property < 0)
-                throw new ArgumentException(string.Format("The {0} is invalid", propertyName));
+                throw new ArgumentOutOfRangeException(string.Format("The {0} is invalid", propertyName));
             return property;
         }
 
