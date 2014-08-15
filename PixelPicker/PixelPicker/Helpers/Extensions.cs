@@ -89,5 +89,23 @@ namespace PixelPicker.Helpers
                  || uri.Scheme == Uri.UriSchemeFtp
                  || uri.Scheme == Uri.UriSchemeMailto);
         }
+
+        /// <summary>
+        /// Clamps the specified value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="Value">The value.</param>
+        /// <param name="Max">The maximum.</param>
+        /// <param name="Min">The minimum.</param>
+        /// <returns></returns>
+        public static T Clamp<T>(T Value, T Max, T Min)
+         where T : System.IComparable<T>
+        {
+            if (Value.CompareTo(Max) > 0)
+                return Max;
+            if (Value.CompareTo(Min) < 0)
+                return Min;
+            return Value;
+        }
     }
 }

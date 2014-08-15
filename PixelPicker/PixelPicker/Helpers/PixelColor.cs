@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Media;
+using PixelPicker;
 
 namespace PixelPicker.Helpers
 {
@@ -137,32 +138,11 @@ namespace PixelPicker.Helpers
         public PixelColor[] GetPallete(int ncolors, double factor)
         {
             var array = new PixelColor[ncolors];
-            for (int i = 0; i < ncolors; i++)
+        
+            for (var i = 0; i < ncolors; i ++)
             {
-                int r = this.r;
-                int g = this.g;
-                int b = this.b;
-                if (r > 150)
-                {
-                    r = (int)(this.r - (i * factor));
-                    if (r < 0)
-                        r = 0;
-                }
-                else if (g > 150)
-                {
-                    g = (int)(this.g - (i * factor));
-                    if (g < 0)
-                        g = 0;
-                }
-                else if (b > 150)
-                {
-                    b = (int)(this.b - (i * factor));
-                    if (b < 0)
-                        b = 0;
-                }
-
-
-                array[i] = new PixelColor(255, r, g, b);
+                var newL = Extensions.Clamp<double>(Math.Max(0, (this.GetLuminosity() - (factor*i*0.05) )),1,0);
+                array[i] = PixelColor.FromHSL(this.a, this.GetHue(), this.GetSaturation(), newL );
             }
             return array;
         }

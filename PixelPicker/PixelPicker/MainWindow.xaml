@@ -11,6 +11,7 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.7*"></ColumnDefinition>
+            <ColumnDefinition Width="20"></ColumnDefinition>
             <ColumnDefinition Width="0.3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -19,44 +20,55 @@
             <RowDefinition Height="0.9*"></RowDefinition>
 
         </Grid.RowDefinitions>
-        <TextBox Text="{Binding ImageLinks, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.RowSpan="2"></TextBox>
+        <TextBox Text="{Binding ImageLinks, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ></TextBox>
+
+        <Slider Minimum="0" Maximum="1" Value="{Binding LuminosityOnPallete, Mode=TwoWay}" Orientation="Vertical" Grid.Column="1" Grid.Row="1" ></Slider>
+
+        <StackPanel  Grid.Row="1" Grid.Column="2">
+
+
+            <ListBox ItemsSource="{Binding ColorPallete}"  VerticalAlignment="Top"  >
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"></StackPanel>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Rectangle Fill="{Binding}" Width="22" Height="22"></Rectangle>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Slider Value="{Binding NumOfColorsInPallete, Mode=TwoWay}"  VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="1"></Slider>
+        </StackPanel>
+
+
         <Image x:Name="currentImage" Source="{Binding CurrentImage}" Margin="20" Grid.Row="2" >
             <i:Interaction.Behaviors>
                 <helpers:GetPixelCommandBehavior  GetPixelCommand="{Binding GetPixelCommand}"></helpers:GetPixelCommandBehavior>
             </i:Interaction.Behaviors>
         </Image>
-       
-        <Rectangle Fill="{Binding CurrentBrush}" Grid.Column="1"></Rectangle>
-        <StackPanel  Grid.Column="1" HorizontalAlignment="Left">
+
+        <Rectangle Fill="{Binding CurrentBrush}" Grid.Column="2"></Rectangle>
+        <StackPanel  Grid.Column="2" HorizontalAlignment="Left">
             <TextBlock Text="{Binding CurrentColor.Red, StringFormat=Red: {0}}"></TextBlock>
             <TextBlock Text="{Binding CurrentColor.Green, StringFormat=Green: {0}}"></TextBlock>
             <TextBlock Text="{Binding CurrentColor.Blue, StringFormat=Blue: {0}}"></TextBlock>
         </StackPanel>
-        <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+        <StackPanel Grid.Column="2" HorizontalAlignment="Right">
             <TextBlock Text="{Binding CurrentColor.Hue, StringFormat=Hue: {0}}"></TextBlock>
             <TextBlock Text="{Binding CurrentColor.Saturation, StringFormat=Saturation: {0:P2}}"></TextBlock>
             <TextBlock Text="{Binding CurrentColor.Luminosity, StringFormat=Luminosity: {0:P2}}"></TextBlock>
         </StackPanel>
-     
-        <ListBox ItemsSource="{Binding ImageUrls}" SelectedItem="{Binding SelectedImageUrl, Mode=TwoWay}"  Grid.Row="2"  Grid.Column="1" >
+
+        <ListBox ItemsSource="{Binding ImageUrls}" SelectedItem="{Binding SelectedImageUrl, Mode=TwoWay}"  Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="1" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Image Source="{Binding}" Stretch="Uniform" Width="200"></Image>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox ItemsSource="{Binding ColorPallete}"  Grid.Row="1" Grid.Column="1" VerticalAlignment="Top"  >
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"></StackPanel>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Rectangle Fill="{Binding}" Width="22" Height="22"></Rectangle>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+
 
     </Grid>
 </Window>

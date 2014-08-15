@@ -99,7 +99,7 @@ namespace PixelPicker.ViewModel
         void UpdateColorPallete()
         {
             ColorPallete.Clear();
-            foreach (var item in _currentColor.GetPallete(5, 50))
+            foreach (var item in _currentColor.GetPallete(_numOfColorsInPallete, _luminosityOnPallete))
             {
                 ColorPallete.Add(new SolidColorBrush(item));
             }
@@ -169,6 +169,7 @@ namespace PixelPicker.ViewModel
                 _currentColor = value;
                 OnPropertyChanged("CurrentColor");
                 OnPropertyChanged("CurrentBrush");
+                LuminosityOnPallete = _currentColor.Luminosity;
                 UpdateColorPallete();
             }
         }
@@ -197,6 +198,33 @@ namespace PixelPicker.ViewModel
                 OnPropertyChanged("ImageUrls");
             }
         }
+
+        private int _numOfColorsInPallete = 5;
+
+        public int NumOfColorsInPallete
+        {
+            get { return _numOfColorsInPallete; }
+            set
+            {
+                _numOfColorsInPallete = value;
+                OnPropertyChanged("NumOfColorsInPallete");
+                UpdateColorPallete();
+            }
+        }
+
+        private double _luminosityOnPallete = 0.5;
+
+        public double LuminosityOnPallete
+        {
+            get { return _luminosityOnPallete; }
+            set
+            {
+                _luminosityOnPallete = value;
+                OnPropertyChanged("LuminosityOnPallete");
+                UpdateColorPallete();
+            }
+        }
+
 
         #endregion
 
